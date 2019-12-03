@@ -1,6 +1,7 @@
 #!/bin/bash
 set -ex
 
+# TODO Make an input variable
 fileName="RELEASE.md"
 firstTag=$(git tag | sort -r | head -1)
 secondTag=$(git tag | sort -r | head -2 | awk '{split($0, tags, "\n")} END {print tags[1]}')
@@ -10,7 +11,8 @@ cat <<EOF > ${fileName}
 ## Version ${firstTag}
 EOF
 
-git log  --oneline ${secondTag}...${firstTag} >> ${fileName}
+# TODO Make format an input variable
+git log --pretty='format:* %h – %s' ${secondTag}...${firstTag} >> ${fileName}
 
 #
 # --- Export Environment Variables for other Steps:
@@ -29,4 +31,4 @@ git log  --oneline ${secondTag}...${firstTag} >> ${fileName}
 # The exit code of your Step is very important. If you return
 #  with a 0 exit code `bitrise` will register your Step as "successful".
 # Any non zero exit code will be registered as "failed" by `bitrise`.
-return 0
+exit 0
